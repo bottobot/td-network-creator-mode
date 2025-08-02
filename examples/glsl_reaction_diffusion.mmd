@@ -1,0 +1,78 @@
+graph TD
+    %% Reaction-Diffusion Network Diagram
+    
+    subgraph container["reaction_diffusion (Container COMP)"]
+        %% Initial state
+        noise[initial_noise<br/>Noise TOP<br/>Type: Sparse]
+        
+        %% Core simulation loop
+        feedback[feedback<br/>Feedback TOP]
+        glsl[reaction_diffusion_glsl<br/>GLSL TOP<br/>1024x1024<br/>32-bit float]
+        
+        %% Parameter inputs
+        mouse[mouse<br/>Mouse In CHOP]
+        radius[mouse_radius<br/>Constant CHOP<br/>radius: 0.05]
+        
+        %% Parameter controls
+        subgraph params["parameters (Container COMP)"]
+            diff_a[diffusion_a<br/>Slider COMP<br/>0.8-1.0]
+            diff_b[diffusion_b<br/>Slider COMP<br/>0.3-0.6]
+            feed[feed_rate<br/>Slider COMP<br/>0.01-0.1]
+            kill[kill_rate<br/>Slider COMP<br/>0.045-0.07]
+            time[time_step<br/>Slider COMP<br/>0.5-2.0]
+            iter[iterations<br/>Slider COMP<br/>1-10]
+        end
+        
+        %% Parameter processing
+        merge[param_merge<br/>Merge CHOP]
+        
+        %% Color mapping
+        ramp[color_ramp<br/>Ramp TOP<br/>Type: Radial]
+        lookup[color_lookup<br/>Lookup TOP<br/>Mode: Luminance]
+        
+        %% Output
+        out1[out1<br/>Out TOP]
+        
+        %% Reset controls
+        reset[reset<br/>Button COMP]
+        exec[reset_exec<br/>Execute DAT]
+    end
+    
+    %% Connections
+    noise -.->|Initialize| feedback
+    feedback --> glsl
+    glsl --> feedback
+    glsl --> lookup
+    
+    %% Parameter connections
+    diff_a --> merge
+    diff_b --> merge
+    feed --> merge
+    kill --> merge
+    time --> merge
+    iter --> merge
+    
+    merge -.->|Uniforms| glsl
+    mouse -.->|Mouse Position| glsl
+    radius -.->|Mouse Radius| glsl
+    
+    %% Color mapping
+    ramp --> lookup
+    lookup --> out1
+    
+    %% Reset logic
+    reset --> exec
+    exec -.->|Reset Pulse| feedback
+    
+    %% Styling
+    classDef topNode fill:#4a90e2,stroke:#2e5c8a,color:#fff
+    classDef chopNode fill:#e24a4a,stroke:#8a2e2e,color:#fff
+    classDef compNode fill:#4ae290,stroke:#2e8a5c,color:#fff
+    classDef datNode fill:#e2904a,stroke:#8a5c2e,color:#fff
+    classDef containerNode fill:#666,stroke:#333,color:#fff
+    
+    class noise,feedback,glsl,ramp,lookup,out1 topNode
+    class mouse,radius,merge chopNode
+    class diff_a,diff_b,feed,kill,time,iter,reset compNode
+    class exec datNode
+    class container,params containerNode

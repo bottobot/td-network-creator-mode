@@ -1,0 +1,79 @@
+graph TD
+    %% Color Gradient Network Diagram
+    
+    subgraph container["color_gradient (Container COMP)"]
+        %% Main shader
+        glsl[gradient_glsl<br/>GLSL TOP<br/>1920x1080<br/>16-bit float]
+        
+        %% Parameter controls
+        subgraph params["parameters (Container COMP)"]
+            type[gradient_type<br/>Menu COMP<br/>Linear/Radial/Angular/<br/>Diamond/Spiral]
+            center[center<br/>XY Slider COMP<br/>0-1 range]
+            angle[angle<br/>Slider COMP<br/>-180 to 180]
+            scale[scale<br/>Slider COMP<br/>0.1-5.0]
+            offset[offset<br/>Slider COMP<br/>-1 to 1]
+            power[power<br/>Slider COMP<br/>0.1-4.0]
+            repeat[repeat<br/>Slider COMP<br/>1-10]
+            mirror[mirror<br/>Toggle COMP]
+            smooth[smoothness<br/>Slider COMP<br/>0-1]
+            interp[interpolation<br/>Menu COMP<br/>Linear/Smooth/Cubic]
+        end
+        
+        %% Color palette
+        subgraph colors["color_palette (Container COMP)"]
+            color0[color0<br/>Color Picker COMP]
+            color1[color1<br/>Color Picker COMP]
+            color2[color2<br/>Color Picker COMP]
+            color3[color3<br/>Color Picker COMP]
+            color4[color4<br/>Color Picker COMP]
+            count[color_count<br/>Slider COMP<br/>2-5]
+        end
+        
+        %% Parameter processing
+        type_select[select_type<br/>Select CHOP]
+        angle_rad[angle_radians<br/>Math CHOP<br/>Degrees to Radians]
+        
+        %% Output
+        out1[out1<br/>Out TOP]
+        
+        %% Preview
+        preview[preview<br/>Window COMP<br/>640x360]
+    end
+    
+    %% Connections
+    glsl --> out1
+    glsl -.->|Display| preview
+    
+    %% Parameter connections
+    type --> type_select
+    angle --> angle_rad
+    
+    type_select -.->|uGradientType| glsl
+    center -.->|uCenter| glsl
+    angle_rad -.->|uAngle| glsl
+    scale -.->|uScale| glsl
+    offset -.->|uOffset| glsl
+    power -.->|uPower| glsl
+    repeat -.->|uRepeat| glsl
+    mirror -.->|uMirror| glsl
+    smooth -.->|uSmoothness| glsl
+    interp -.->|uInterpolation| glsl
+    
+    %% Color connections
+    color0 -.->|uColor0| glsl
+    color1 -.->|uColor1| glsl
+    color2 -.->|uColor2| glsl
+    color3 -.->|uColor3| glsl
+    color4 -.->|uColor4| glsl
+    count -.->|uColorCount| glsl
+    
+    %% Styling
+    classDef topNode fill:#4a90e2,stroke:#2e5c8a,color:#fff
+    classDef chopNode fill:#e24a4a,stroke:#8a2e2e,color:#fff
+    classDef compNode fill:#4ae290,stroke:#2e8a5c,color:#fff
+    classDef containerNode fill:#666,stroke:#333,color:#fff
+    
+    class glsl,out1 topNode
+    class type_select,angle_rad chopNode
+    class type,center,angle,scale,offset,power,repeat,mirror,smooth,interp,color0,color1,color2,color3,color4,count,preview compNode
+    class container,params,colors containerNode

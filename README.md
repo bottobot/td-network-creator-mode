@@ -50,6 +50,44 @@ The TD Network Creator mode is designed to generate TouchDesigner networks throu
 - Debug version with logging
 - Modular version for integration
 
+#### GLSL Shader Support
+- Automatic GLSL shader generation and validation
+- TouchDesigner-specific GLSL syntax compliance
+- Multiple shader templates (fragment, compute, multi-pass)
+- GLSL debugging helpers and error checking
+- Performance optimization recommendations
+
+## GLSL Shader Development
+
+The TD Network Creator mode provides comprehensive support for GLSL shader development within TouchDesigner networks. This feature ensures that generated shaders follow TouchDesigner's specific GLSL conventions and best practices.
+
+### Overview of GLSL Support
+
+The mode automatically generates GLSL shaders that are fully compatible with TouchDesigner's rendering pipeline. It validates shader syntax, ensures proper uniform declarations, and follows TD-specific conventions for texture sampling and output formatting.
+
+### TouchDesigner GLSL Conventions
+
+- Proper use of `sTD2DInputs[]` array for texture inputs
+- Correct uniform declarations with TD-specific naming
+- Resolution-aware sampling with automatic coordinate normalization
+- Multi-output support for complex shader pipelines
+
+### Available Shader Templates
+
+1. **Fragment Shaders**: Standard 2D image processing and effects
+2. **Compute Shaders**: GPU-accelerated parallel computations
+3. **Multi-Pass Shaders**: Complex effects requiring multiple render passes
+4. **Feedback Shaders**: Temporal effects with proper buffer management
+
+### Debugging Techniques
+
+- Automatic error checking with line-specific feedback
+- Visual debugging helpers (color-coded outputs)
+- Performance profiling recommendations
+- Common pitfall warnings
+
+For detailed GLSL best practices and advanced techniques, see the [TD GLSL Best Practices](TD_GLSL_Best_Practices.md) document.
+
 ## Installation
 
 1. Ensure you have [Roo-Cline](https://github.com/RooVetGit/Roo-Cline) installed
@@ -97,6 +135,25 @@ Bot: What audio input source would you like to use?
 ...
 ```
 
+### GLSL Examples
+
+The mode includes several GLSL shader examples demonstrating various techniques:
+
+1. **glsl_reaction_diffusion.py** - Gray-Scott reaction-diffusion system
+   - Implements a complex reaction-diffusion simulation
+   - Demonstrates compute shader usage for iterative processes
+   - Includes parameter controls for pattern variation
+
+2. **glsl_color_gradient.py** - Multi-type gradient generator
+   - Shows various gradient generation techniques
+   - Supports linear, radial, angular, and diamond gradients
+   - Demonstrates efficient color interpolation in GLSL
+
+3. **glsl_multi_input_blend.py** - Advanced blending with 16 blend modes
+   - Implements Photoshop-style blend modes in GLSL
+   - Handles multiple texture inputs efficiently
+   - Includes opacity and mask support
+
 ## Output Example
 
 The mode generates multiple files:
@@ -122,7 +179,24 @@ audio_in.outputConnectors[0].connect(audio_analyze.inputConnectors[0])
 # ... (rest of network creation)
 ```
 
-### 2. Mermaid Diagram (`particle_audio_network.mmd`)
+### 2. GLSL Shader Files (`particle_audio_shader.glsl`)
+```glsl
+// TouchDesigner GLSL Fragment Shader
+// Audio Reactive Particle Visualization
+
+uniform float uTime;
+uniform float uAudioLevel;
+
+out vec4 fragColor;
+
+void main() {
+    vec2 uv = gl_FragCoord.xy / uTD2DInfos[0].res.xy;
+    // Shader implementation...
+    fragColor = vec4(color, 1.0);
+}
+```
+
+### 3. Mermaid Diagram (`particle_audio_network.mmd`)
 ```mermaid
 flowchart TD
     subgraph "Audio Input"
@@ -142,7 +216,7 @@ flowchart TD
     end
 ```
 
-### 3. Conversion Scripts
+### 4. Conversion Scripts
 - `convert_to_pdf.bat` / `convert_to_pdf.sh`
 - `convert_to_svg.bat` / `convert_to_svg.sh`
 
@@ -152,6 +226,7 @@ flowchart TD
 - TD MCP Server installed and running
 - Node.js (for Mermaid diagram conversion)
 - Optional: mermaid-cli for direct conversion
+- VS Codium GLSL extensions for shader syntax highlighting and validation
 
 ## Contributing
 

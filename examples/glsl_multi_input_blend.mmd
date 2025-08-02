@@ -1,0 +1,108 @@
+graph TD
+    %% Multi-Input Blend Network Diagram
+    
+    subgraph container["multi_input_blend (Container COMP)"]
+        %% Input TOPs
+        in1[in1<br/>In TOP]
+        in2[in2<br/>In TOP]
+        in3[in3<br/>In TOP]
+        in4[in4<br/>In TOP<br/>Layer/Mask]
+        
+        %% Test sources
+        test_base[test_base<br/>Ramp TOP<br/>Diagonal]
+        test_layer1[test_layer1<br/>Noise TOP<br/>Sparse]
+        test_layer2[test_layer2<br/>Circle TOP<br/>Radius: 0.3]
+        test_mask[test_mask<br/>Ramp TOP<br/>Radial]
+        
+        %% Main shader
+        glsl[blend_glsl<br/>GLSL TOP<br/>1920x1080<br/>16-bit float<br/>4 inputs]
+        
+        %% Parameter controls
+        subgraph params["parameters (Container COMP)"]
+            %% Layer 1 controls
+            layer1_label[layer1_label<br/>Text DAT<br/>"LAYER 1"]
+            blend1[blend_mode1<br/>Menu COMP<br/>16 blend modes]
+            opacity1[opacity1<br/>Slider COMP<br/>0-1]
+            scale1[scale1<br/>XY Slider COMP<br/>0.1-2.0]
+            rotation1[rotation1<br/>Slider COMP<br/>-180 to 180]
+            
+            %% Layer 2 controls
+            layer2_label[layer2_label<br/>Text DAT<br/>"LAYER 2"]
+            blend2[blend_mode2<br/>Menu COMP<br/>16 blend modes]
+            opacity2[opacity2<br/>Slider COMP<br/>0-1]
+            scale2[scale2<br/>XY Slider COMP<br/>0.1-2.0]
+            rotation2[rotation2<br/>Slider COMP<br/>-180 to 180]
+            
+            %% Layer 3 controls
+            layer3_label[layer3_label<br/>Text DAT<br/>"LAYER 3"]
+            blend3[blend_mode3<br/>Menu COMP<br/>16 blend modes]
+            opacity3[opacity3<br/>Slider COMP<br/>0-1]
+            scale3[scale3<br/>XY Slider COMP<br/>0.1-2.0]
+            rotation3[rotation3<br/>Slider COMP<br/>-180 to 180]
+            
+            %% Global adjustments
+            global_label[global_label<br/>Text DAT<br/>"GLOBAL ADJUSTMENTS"]
+            contrast[contrast<br/>Slider COMP<br/>0-2]
+            brightness[brightness<br/>Slider COMP<br/>-1 to 1]
+            saturation[saturation<br/>Slider COMP<br/>0-2]
+            
+            %% Mask settings
+            mask_label[mask_label<br/>Text DAT<br/>"MASK SETTINGS"]
+            use_mask[use_mask<br/>Toggle COMP]
+            mask_channel[mask_channel<br/>Menu COMP<br/>R/G/B/A]
+            invert_mask[invert_mask<br/>Toggle COMP]
+        end
+        
+        %% Output
+        out1[out1<br/>Out TOP]
+    end
+    
+    %% Connections - Test sources to inputs
+    test_base --> in1
+    test_layer1 --> in2
+    test_layer2 --> in3
+    test_mask --> in4
+    
+    %% Inputs to GLSL
+    in1 --> glsl
+    in2 --> glsl
+    in3 --> glsl
+    in4 --> glsl
+    
+    %% GLSL to output
+    glsl --> out1
+    
+    %% Parameter connections (simplified)
+    blend1 -.->|uBlendMode1| glsl
+    opacity1 -.->|uOpacity1| glsl
+    scale1 -.->|uScale1| glsl
+    rotation1 -.->|uRotation1| glsl
+    
+    blend2 -.->|uBlendMode2| glsl
+    opacity2 -.->|uOpacity2| glsl
+    scale2 -.->|uScale2| glsl
+    rotation2 -.->|uRotation2| glsl
+    
+    blend3 -.->|uBlendMode3| glsl
+    opacity3 -.->|uOpacity3| glsl
+    scale3 -.->|uScale3| glsl
+    rotation3 -.->|uRotation3| glsl
+    
+    contrast -.->|uContrast| glsl
+    brightness -.->|uBrightness| glsl
+    saturation -.->|uSaturation| glsl
+    
+    use_mask -.->|uUseMask| glsl
+    mask_channel -.->|uMaskChannel| glsl
+    invert_mask -.->|uInvertMask| glsl
+    
+    %% Styling
+    classDef topNode fill:#4a90e2,stroke:#2e5c8a,color:#fff
+    classDef compNode fill:#4ae290,stroke:#2e8a5c,color:#fff
+    classDef datNode fill:#e2904a,stroke:#8a5c2e,color:#fff
+    classDef containerNode fill:#666,stroke:#333,color:#fff
+    
+    class in1,in2,in3,in4,test_base,test_layer1,test_layer2,test_mask,glsl,out1 topNode
+    class blend1,opacity1,scale1,rotation1,blend2,opacity2,scale2,rotation2,blend3,opacity3,scale3,rotation3,contrast,brightness,saturation,use_mask,mask_channel,invert_mask compNode
+    class layer1_label,layer2_label,layer3_label,global_label,mask_label datNode
+    class container,params containerNode
