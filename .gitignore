@@ -1,0 +1,39 @@
+# Generated files
+*.pdf
+*.svg
+*.png
+
+# TouchDesigner files
+*.toe
+*.tox
+*.crash
+*.toe.bak
+*.tox.bak
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp

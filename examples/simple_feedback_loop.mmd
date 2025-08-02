@@ -1,0 +1,21 @@
+flowchart TD
+    subgraph feedback_container["Feedback System Container"]
+        noise[Noise TOP<br/>noise_source<br/>1920x1080]
+        feedback[Feedback TOP<br/>feedback_loop]
+        level[Level TOP<br/>level_adjust<br/>brightness: 0.95]
+        composite[Composite TOP<br/>mixer<br/>mode: over]
+        output[Null TOP<br/>output<br/>display: on]
+        feedback_target[Null TOP<br/>feedback_target]
+        
+        noise --> composite
+        feedback --> level
+        level --> composite
+        composite --> feedback
+        feedback --> feedback_target
+        composite --> output
+    end
+    
+    style noise fill:#f9f,stroke:#333,stroke-width:2px
+    style output fill:#9f9,stroke:#333,stroke-width:2px
+    style feedback fill:#ff9,stroke:#333,stroke-width:2px
+    style feedback_target fill:#9ff,stroke:#333,stroke-width:2px
