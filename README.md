@@ -4,7 +4,9 @@ A specialized mode for [Roo-Cline](https://github.com/RooVetGit/Roo-Cline) that 
 
 ## Overview
 
-The TD Network Creator mode is designed to generate TouchDesigner networks through Python scripts that can be executed in textport. It ensures accuracy by consulting the TD MCP Server for all TouchDesigner-related details, never relying on assumptions or training data.
+The TD Network Creator mode was designed to generate TouchDesigner networks through Python scripts that can be executed in textport. It is supposed ensure accuracy by consulting the TD MCP Server for all TouchDesigner-related details, never relying on assumptions or training data. BUT IT DOESN'T! The big problem I'm having right now is getting any LLM whether its ChatGPT-5 or Claude Opus/Sonnet or Gemini to not forget that it's supposed to go to the TD MCP Server 'well' for every detail of the network its creating. I can get it to do some very basic stuff but once it gets a little complicated it just starts falling back to the data it was trained on rather than the MCP server. 
+
+*****I consider this project a failure, for now. I'm still trying new things and I'll update it if I can get it working properly or find some other method.****
 
 ## Features
 
